@@ -1,4 +1,4 @@
-package com.iu.notice;
+package com.iu.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

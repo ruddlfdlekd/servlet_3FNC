@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import org.apache.coyote.RequestInfo;
 
-import com.iu.notice.DBConnector;
+import com.iu.util.DBConnector;
 
 import jdk.nashorn.internal.ir.RuntimeNode.Request;
 
