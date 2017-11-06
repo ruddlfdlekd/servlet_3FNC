@@ -7,7 +7,25 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	response.setCharacterEncoding("UTF-8");
+	
+	
+	
+	
+	
+	String kind=request.getParameter("kind");
+	String search = request.getParameter("search");
+	
+	if(kind==null){
+		kind="id";
+	}
+	
+	if(search==null){
+		search="";
+	}
+	
+	
 
+	
 	int curPage = 1;
 	int perPage = 10;
 	int perBlock = 5;
@@ -20,9 +38,9 @@
 	int startRow = (curPage - 1) * perPage + 1;
 	int lastRow = curPage * perPage;
 
-	ArrayList<MemberDTO> ar = memberDAO.selectList(startRow, lastRow);
+	ArrayList<MemberDTO> ar = memberDAO.selectList(startRow, lastRow,kind,search);
 
-	int totalCount = memberDAO.getTotalCount();
+	int totalCount = memberDAO.getTotalCount(kind,search);
 
 	int totalPage = 0;
 	if (totalCount % perPage == 0)
@@ -56,6 +74,20 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="../css/main.css" rel="stylesheet">
+<style type = "text/css">
+table,tr,td{
+border:1px solid black;
+
+
+
+}
+
+
+</style>
+
+
+
+
 </head>
 <body>
 	<%@ include file="../temp/header.jsp"%>
@@ -86,6 +118,16 @@
 				</tbody>
 			</table>
 		</article>
+		
+<form action="./memberlist.jsp">
+		<select name="kind">
+			<option value="id">Id</option>
+			<option value="name">Name</option>
+			<option value="email">Email</option>
+		</select>
+		<input type="text" name="search">
+		<input type="submit" value="SEARCH">
+	</form>
 	</section>
 
 

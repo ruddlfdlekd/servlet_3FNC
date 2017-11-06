@@ -13,82 +13,80 @@ import jdk.nashorn.internal.ir.RuntimeNode.Request;
 
 public class noticeDAO {
 
-	public int getTotalCount() throws Exception{
+	public int getTotalCount(String kind, String search) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql ="select nvl(count(num), 0) from notice";
+		String sql ="select nvl(count(num), 0) from notice where "+ kind+ " like ?";
 		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, "%"+search+"%");
 		ResultSet rs = st.executeQuery();
 		rs.next();
-		int totalCount=rs.getInt(1);
+		int totalCount = rs.getInt(1);
 		DBConnector.disConnect(rs, st, con);
 		return totalCount;
 	}
-	
-	
-	public void hit(int a, int b) throws Exception{
-	Connection con = DBConnector.getConnect();
-		
-		String sql ="update notice set hit=? where num=?";
-		
+
+	public void hit(int a, int b) throws Exception {
+		Connection con = DBConnector.getConnect();
+
+		String sql = "update notice set hit=? where num=?";
+
 		PreparedStatement st = con.prepareStatement(sql);
-		
-		st.setInt(1, a+1);
+
+		st.setInt(1, a + 1);
 		st.setInt(2, b);
 		st.executeUpdate();
-		
+
 		DBConnector.disConnect(st, con);
-		
+
 	}
-	
-	
-	
-	
-	public int update(noticeDTO noticeDTO) throws Exception{
+
+	public int update(noticeDTO noticeDTO) throws Exception {
 		Connection con = DBConnector.getConnect();
-		
-		String sql ="update notice set title=?, contents=? where num=?";
-		
+
+		String sql = "update notice set title=?, contents=? where num=?";
+
 		PreparedStatement st = con.prepareStatement(sql);
 		st.setString(1, noticeDTO.getTitle());
 		st.setString(2, noticeDTO.getContents());
 		st.setInt(3, noticeDTO.getNum());
-		
+
 		int result = st.executeUpdate();
 		DBConnector.disConnect(st, con);
 		return result;
-		
+
 	}
-	public int delete(int num) throws Exception{
+
+	public int delete(int num) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql ="delete notice where num=?";
+		String sql = "delete notice where num=?";
 		PreparedStatement st = con.prepareStatement(sql);
 		st.setInt(1, num);
 		int result = st.executeUpdate();
 		DBConnector.disConnect(st, con);
 		return result;
 	}
-	
+
 	public int insert(noticeDTO noticeDTO) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql ="insert into notice values(num2.nextval,?,?,?,sysdate,0)";
+		String sql = "insert into notice values(num2.nextval,?,?,?,sysdate,0)";
 		PreparedStatement st = con.prepareStatement(sql);
 		st.setString(1, noticeDTO.getTitle());
-		st.setString(2,noticeDTO.getWriter());
+		st.setString(2, noticeDTO.getWriter());
 		st.setString(3, noticeDTO.getContents());
 		int result = st.executeUpdate();
-		
+
 		DBConnector.disConnect(st, con);
 		return result;
 	}
-	
+
 	public noticeDTO select(int num) throws Exception {
 		Connection con = DBConnector.getConnect();
-		noticeDTO noticeDTO=null;
-		String sql="select * from notice where num=?";
+		noticeDTO noticeDTO = null;
+		String sql = "select * from notice where num=?";
 		PreparedStatement st = con.prepareStatement(sql);
 		st.setInt(1, num);
 		ResultSet rs = st.executeQuery();
-		if(rs.next()) {
+		if (rs.next()) {
 			noticeDTO = new noticeDTO();
 			noticeDTO.setNum(rs.getInt("num"));
 			noticeDTO.setTitle(rs.getString("title"));
@@ -97,29 +95,28 @@ public class noticeDAO {
 			noticeDTO.setReg_data(rs.getDate("reg_data").toString());
 			noticeDTO.setHit(rs.getInt("hit"));
 		}
-		
-		DBConnector.disConnect(rs, st, con);
-		
-		return noticeDTO;
-		
-	}
-	
 
-	
-	
-	
-	public ArrayList<noticeDTO> selectList(int startRow,int lastRow) throws Exception{
+		DBConnector.disConnect(rs, st, con);
+
+		return noticeDTO;
+
+	}
+
+	public ArrayList<noticeDTO> selectList(int startRow, int lastRow, String kind, String search) throws Exception {
 		ArrayList<noticeDTO> ar = new ArrayList<>();
 		Connection con = DBConnector.getConnect();
-		
-		
-		
-		String sql = "select * from (select rownum R, N.* from(select * from notice order by num desc) N) where R between ? and ?";
-	    PreparedStatement st = con.prepareStatement(sql);	
-				st.setInt(1, startRow);
-				st.setInt(2, lastRow);
+
+		String sql ="select * from "
+				+ "(select rownum R, N.* from "
+				+ "(select * from notice where "+kind+" like ? order by num desc) N) "
+				+ "where R between ? and ?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, "%" + search + "%");
+		st.setInt(2, startRow);
+		st.setInt(3, lastRow);
+
 		ResultSet rs = st.executeQuery();
-		while(rs.next()) {
+		while (rs.next()) {
 			noticeDTO noticeDTO = new noticeDTO();
 			noticeDTO.setNum(rs.getInt("num"));
 			noticeDTO.setTitle(rs.getString("title"));
@@ -130,13 +127,8 @@ public class noticeDAO {
 			ar.add(noticeDTO);
 		}
 		DBConnector.disConnect(rs, st, con);
-		
+
 		return ar;
 	}
-	
-	
-	
-	
-	
-	
+
 }

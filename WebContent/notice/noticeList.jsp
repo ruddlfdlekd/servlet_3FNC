@@ -1,74 +1,75 @@
 <%@page import="com.iu.notice.noticeDTO"%>
-<%@page import="com.iu.notice.noticeDAO"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.iu.notice.DBConnector"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.PreparedStatement"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.Connection"%>
+<%@page import="com.iu.notice.noticeDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%
-    request.setCharacterEncoding("UTF-8");
+<%
+	request.setCharacterEncoding("UTF-8");
 	response.setCharacterEncoding("UTF-8");
-    int curPage=1;
-    String kind=request.getParameter("kind");
-    String search=request.getParameter("search");
+	String kind=request.getParameter("kind");
+	String search = request.getParameter("search");
+	
+	if(kind==null){
+		kind="title";
+	}
+	
+	if(search==null){
+		search="";
+	}
+	
+	int curPage=1;
 	try{
 		curPage=Integer.parseInt(request.getParameter("curPage"));
 	}catch(Exception e){
 		e.printStackTrace();
 	}
-	if(curPage==0)
-		curPage=1;
+	
 	
 	int perPage=10;
 	int startRow=(curPage-1)*perPage+1;
 	int lastRow=curPage*perPage;
 	noticeDAO noticeDAO = new noticeDAO();
-	ArrayList<noticeDTO> ar = noticeDAO.selectList(startRow,lastRow);
+	ArrayList<noticeDTO> ar = noticeDAO.selectList(startRow,lastRow, kind, search);
 	///////////////////////////////////////////
-	int totalCount = noticeDAO.getTotalCount();
+	//pageing
+	int totalCount = noticeDAO.getTotalCount(kind, search);
 	int totalPage=0;
 	if(totalCount%perPage==0){
 		totalPage=totalCount/perPage;
 	}else {
 		totalPage=totalCount/perPage+1;
 	}
-	int totalBlock=0;
+	
+	//totalBlock
 	int perBlock=5;
+	int totalBlock=0;
 	if(totalPage%perBlock==0){
 		totalBlock=totalPage/perBlock;
 	}else {
 		totalBlock=totalPage/perBlock+1;
 	}
-	int curBlock =0;
-	
-	if(curPage%perBlock==0)
-	curBlock=curPage/perBlock;	
-	else
-	curBlock=curPage/perBlock+1;
-	
+	//curPage를 이용해서 curBlock 구하기
+	int curBlock=0;
+	if(curPage%perBlock==0){
+		curBlock=curPage/perBlock;
+	}else {
+		curBlock=curPage/perBlock+1;
+	}
 	
 	//curBlock , startNum, lastNum
 	int startNum=(curBlock-1)*perBlock+1;
 	int lastNum = curBlock*perBlock;
 	
-	
-	
-	
-	if(curPage<2)
-		startNum=1;
 	if(curBlock==totalBlock){
 		lastNum=totalPage;
 	}
-%>  
+	
+%>    
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
@@ -78,92 +79,80 @@
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-
-<link href="../css/reset.css">
 <style type="text/css">
-	* {
-		margin: 0;
-		padding: 0;
-	}
-
-</style>
-<link href="../css/main.css" rel="stylesheet">
-<link href="../css/contents.css" rel="stylesheet">
-
-
-<script type="text/javascript">
-window.onload=function(){
-		var btn = document.getElementById("btn");
-		btn.addEventListener("click", function(){
-			location.href="./noticeWriteForm.jsp";			
-		});
-		
-		
-		
-	}
-		
 	
-
-
-</script>
-
-
+	h1 {
+		width: 30%;
+		margin: 0 auto;
+		text-align: center;
+	}
+	#list {
+		width: 75%;
+		margin: 0 auto;
+		margin-top: 100px;
+	}
+</style>
+<link href="../css/header.css" rel="stylesheet">
 </head>
 <body>
-	
 	<%@ include file="../temp/header.jsp" %>
 	<section id="main">
-	<div>
-	<h2 id="fw">NOTICE</h2>
-	<div id="contents">
-	<table class="table table-hover">
-		<tr id="tr1">
-			<td><font>NO</font></td>
-			<td id="subject"><font>SUBJECT</font></td>
-			<td><font>NAME</font></td>
-			<td class="date"><font>DATE</font></td>
-			<td class="hit"><font>HIT</font></td>
-		</tr>
-	
-		<% for(noticeDTO noticeDTO: ar){ %>
-			<tr>
-				<td><%=noticeDTO.getNum()%> </td>
-				<td  style="text-align:left;"><a href="noticeView.jsp?num=<%=noticeDTO.getNum()%>"><%=noticeDTO.getTitle()%></a> </td>
-				<td><%=noticeDTO.getWriter()%></td>
-				<td><%=noticeDTO.getReg_data()%> </td>
-				<td><%=noticeDTO.getHit()%> </td>	
+		<h1>Notice List <%= totalCount%></h1>
+		<article id="list">
+			<table class="table table-hover">
+				<tr>
+					<th>NO</th>
+					<td>TITLE</td>
+					<td>WRITER</td>
+					<td>DATE</td>
+					<td>HIT</td>
+				</tr>
+				<% for(noticeDTO noticeDTO: ar){ %>
+				<tr>
+					<td><%=noticeDTO.getNum()%> </td>
+					<td><a href="noticeView.jsp?num=<%=noticeDTO.getNum()%>"><%=noticeDTO.getTitle()%></a> </td>
+					<td><%=noticeDTO.getWriter()%></td>
+					<td><%=noticeDTO.getReg_data()%> </td>
+					<td><%=noticeDTO.getHit()%> </td>	
 				</tr>
 				<%} %>
-	</table>
-		
-	<div style="margin:0 auto;">
-	 <ul class="pagination">
-	    <li><a href="./noticeList.jsp?curPage=<%=startNum-1%>"><</a></li>
+			</table>
+			
+			<!-- pageing -->
+			<div class="container">
+  
+  <ul class="pagination">
+  	<% if(curBlock>1){ %>
+  	 <li><a href="./noticeList.jsp?curPage=<%=startNum-1%>&kind=<%=kind%>&search=<%=search%>">[이전]</a></li>
+  	 <%} %>
+  
     <%	for(int i=startNum;i<=lastNum;i++){ %>
     
-    <li><a href="./noticeList.jsp?curPage=<%=i%>"><%=i %></a></li>
+    <li><a href="./noticeList.jsp?curPage=<%=i%>&kind=<%=kind%>&search=<%=search%>"><%=i %></a></li>
     
     <%} %>
-       <li><a href="./noticeList.jsp?curPage=<%=lastNum+1%>">></a></li>
+    
+    <%if(curBlock < totalBlock){ %>
+    <li><a href="./noticeList.jsp?curPage=<%=lastNum+1%>&kind=<%=kind%>&search=<%=search%>">[다음]</a></li>
+    <%} %>
   </ul>
-	</div>
+</div>
+	<!-- end -->
+	<!-- search 제목, 작성자, 내용 -->
 	<form action="./noticeList.jsp">
-	<select name="kind">
-		<option value="title">Title</option>
-		<option value="writer">Writer</option>
-		<option value="contenets">Contents</option>
-	</select>
-	<Input type="text" name="search">
-	<Input type="submit" value="SEARCH">
+		<select name="kind">
+			<option value="title">Title</option>
+			<option value="writer">Writer</option>
+			<option value="contents">Contents</option>
+		</select>
+		<input type="text" name="search">
+		<input type="submit" value="SEARCH">
 	</form>
-	<input type="button" class="btn btn-info" id="btn" value="글쓰기"> 
-	
-	
-	</div>
-	
-	</div>
-	
-	</section> 
-		<%@ include file="../temp/footer.jsp" %>
+	<!-- search -->		
+			
+			<a class="btn btn-success" href="./noticeWriteForm.jsp">WRITE</a>
+		</article>
+	</section>
+	<%@ include file="../temp/footer.jsp" %>
 </body>
 </html>

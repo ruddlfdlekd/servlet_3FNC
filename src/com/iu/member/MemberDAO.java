@@ -9,10 +9,11 @@ import com.iu.util.DBConnector;
 
 public class MemberDAO {
 	//getCount
-	public int getTotalCount() throws Exception {
+	public int getTotalCount(String kind, String search) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql ="select nvl(count(id), 0) from member";
+		String sql ="select nvl(count(id), 0) from member where "+ kind+ " like ?";
 		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, "%"+search+"%");
 		ResultSet rs = st.executeQuery();
 		rs.next();
 		int result = rs.getInt(1);
@@ -24,18 +25,19 @@ public class MemberDAO {
 	
 	
 	//selectList
-	public ArrayList<MemberDTO> selectList(int startRow, int lastRow) throws Exception{
+	public ArrayList<MemberDTO> selectList(int startRow, int lastRow, String kind, String search) throws Exception{
 		
 		Connection con = DBConnector.getConnect();
 		
 		String sql ="select * from "
 				+ "(select rownum R, M.* from "
-				+ "(select * from member order by id asc) M) "
+				+ "(select * from member where "+kind+" like ? order by id asc) M) "
 				+ "where R between ? and ?";
 		
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setInt(1, startRow);
-		st.setInt(2, lastRow);
+		st.setString(1, "%" + search + "%");
+		st.setInt(2, startRow);
+		st.setInt(3, lastRow);
 		
 		ResultSet rs = st.executeQuery();
 		ArrayList<MemberDTO> ar = new ArrayList<>();
