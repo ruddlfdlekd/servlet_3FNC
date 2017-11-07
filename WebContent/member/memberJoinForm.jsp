@@ -47,7 +47,9 @@
 var a = document.getElementsByClassName("n");
 var btn = document.getElementById("btn");
 var idcheck = document.getElementById("idcheck");
-var pwcheck = document.getElementById("pc");
+var pw1 = document.getElementById("pw1");
+var pw2 = document.getElementById("pw2");
+
 btn.addEventListener("click", function(){
 	var check=true;
 for(var i=0; i<a.length; i++){
@@ -68,6 +70,9 @@ idcheck.addEventListener("click", function() {
 	
 	
 });
+
+
+
 
 
 
