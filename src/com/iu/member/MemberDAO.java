@@ -100,6 +100,23 @@ public class MemberDAO {
 		
 	}
 	
+	public String login(String id, String pw) throws Exception{
+		Connection con = DBConnector.getConnect();
+		String sql = "select id,pw from member where id=?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, id);
+		ResultSet rs = st.executeQuery();
+		String s = "로그인 실패 아이디나 비밀번호를 확인해주세요";
+		if(rs.next()) {
+			if(rs.getString("pw").equals(pw)) {
+				s="로그인성공";
+			}
+			
+		}
+			return s;
+		
+	}
+	
 	
 	
 	

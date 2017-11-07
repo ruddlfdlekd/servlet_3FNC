@@ -40,7 +40,7 @@
 var btn = document.getElementById("btn");
 btn.addEventListener("click", function() {
 	window.opener.document.frm.id.value="<%=id%>";
-	window.opener.document.frm.check.checked=true;
+	window.opener.document.frm.check1.checked=true;
 	window.self.close();
 });
 

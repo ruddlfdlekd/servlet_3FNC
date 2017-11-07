@@ -49,6 +49,23 @@ var btn = document.getElementById("btn");
 var idcheck = document.getElementById("idcheck");
 var pw1 = document.getElementById("pw1");
 var pw2 = document.getElementById("pw2");
+var pc = document.getElementById("pc");
+var ic = document.getElementById("check1");
+pw1.addEventListener("blur", function() {
+	if((pw1.value==pw2.value)&&(pw1.value!="")){
+		pc.checked=true;	
+	}
+	else
+		pc.checked=false;
+});
+pw2.addEventListener("blur", function() {
+	if((pw1.value==pw2.value)&&(pw2.value!="")){
+		pc.checked=true;	
+	}
+	else
+		pc.checked=false;
+});
+
 
 btn.addEventListener("click", function(){
 	var check=true;
@@ -58,21 +75,27 @@ for(var i=0; i<a.length; i++){
 	check=false;
 	break;
 }
+}
+	if(ic.checked!=true||pc.checked!=true){
+		check=false;
+	alert("아이디 중복확인이나 비밀번호가 맞는지 확인해주세요");	
+	}
+	
 	if(check)
 		document.frm.submit();
-	}
+	
 });
 
 
 idcheck.addEventListener("click", function() {
 	var id = document.frm.id.value;
+	if(id!=""){
 	window.open("memberIdCheck.jsp?id="+id,"","top=200,left=300,width=400,height=300");
-	
+	}
+	else
+		alert("아이디를 적어주세요");
 	
 });
-
-
-
 
 
 
