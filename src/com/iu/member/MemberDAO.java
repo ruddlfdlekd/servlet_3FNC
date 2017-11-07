@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import com.iu.notice.noticeDTO;
 import com.iu.util.DBConnector;
 
 public class MemberDAO {
@@ -57,6 +58,55 @@ public class MemberDAO {
 		
 		return ar;
 	}
+	
+	
+	
+	
+	public int insert(MemberDTO MemberDTO) throws Exception {
+		Connection con = DBConnector.getConnect();
+		String sql = "insert into member values(?,?,?,?,?,?,?)";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, MemberDTO.getId());
+		st.setString(2, MemberDTO.getPw());
+		st.setString(3, MemberDTO.getName());
+		st.setString(4, MemberDTO.getEmail());
+		st.setString(5, MemberDTO.getPhone());
+		st.setInt(6, MemberDTO.getAge());
+		st.setString(7, MemberDTO.getJob());
+		
+		
+		int result = st.executeUpdate();
+
+		DBConnector.disConnect(st, con);
+		return result;
+	}
+	
+	
+	public String idcheck(String id) throws Exception {
+		
+		Connection con = DBConnector.getConnect();
+		String sql = "select id from member where id=?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, id);
+		ResultSet rs = st.executeQuery();
+		String s = "아이디 생성 가능";
+		if(rs.next()) 
+				s="아이디 중복";
+		
+			
+		DBConnector.disConnect(rs, st, con);
+		
+		return s;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+
 	//======================
 	
 	

@@ -1,6 +1,5 @@
 <%@page import="com.iu.notice.noticeDAO"%>
 <%@page import="java.sql.PreparedStatement"%>
-<%@page import="com.iu.notice.DBConnector"%>
 <%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -16,7 +15,9 @@
 	if(result>0){
 		s = "Success";
 	}
-	
+		//attribute : name(String), value(Object);
+
+		
 	
 %>    
 <!DOCTYPE html>

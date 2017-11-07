@@ -21,7 +21,8 @@
 	if(result>0){
 		s="Success";
 	}
-	
+	request.setAttribute("message", s);
+	response.sendRedirect("../common/result.jsp");
 
 %>
 
