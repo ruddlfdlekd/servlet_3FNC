@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-
-import com.iu.notice.noticeDTO;
+import com.iu.member.MemberDTO;
 import com.iu.util.DBConnector;
+
 
 public class MemberDAO {
 	//getCount
@@ -20,7 +20,6 @@ public class MemberDAO {
 		int result = rs.getInt(1);
 		
 		DBConnector.disConnect(rs, st, con);
-		
 		return result;
 	}
 	
@@ -100,21 +99,32 @@ public class MemberDAO {
 		
 	}
 	
-	public String login(String id, String pw) throws Exception{
+
+	public MemberDTO login(MemberDTO memberDTO) throws Exception{
+
 		Connection con = DBConnector.getConnect();
-		String sql = "select id,pw from member where id=?";
+		String sql = "select * from member where id=? and pw=?";
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setString(1, id);
+		st.setString(1, memberDTO.getId());
+		st.setString(2, memberDTO.getPw());
 		ResultSet rs = st.executeQuery();
-		String s = "로그인 실패 아이디나 비밀번호를 확인해주세요";
-		if(rs.next()) {
-			if(rs.getString("pw").equals(pw)) {
-				s="로그인성공";
-			}
-			
-		}
-			return s;
+		MemberDTO mDto = null;
 		
+		if(rs.next()) {
+			mDto = new MemberDTO();
+			mDto.setId(rs.getString("id"));
+			mDto.setName(rs.getString("name"));
+			mDto.setEmail(rs.getString("email"));
+			mDto.setPhone(rs.getString("phone"));
+			mDto.setAge(rs.getInt("age"));
+			mDto.setJob(rs.getString("job"));
+		}
+	
+		DBConnector.disConnect(rs, st, con);
+		
+		
+		return mDto;
+	
 	}
 	
 	
@@ -123,9 +133,9 @@ public class MemberDAO {
 	
 	
 	
-
-	//======================
 	
 	
-
+	
+	
+	
 }
