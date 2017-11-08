@@ -4,12 +4,56 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import com.iu.member.MemberDTO;
 import com.iu.util.DBConnector;
 
 
 public class MemberDAO {
 	//getCount
+	public int Delete(String id)throws Exception{
+		Connection con = DBConnector.getConnect();
+		String sql = "Delete from member where id=?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, id);
+		int result = st.executeUpdate();
+		DBConnector.disConnect(st, con);
+		return result;
+		
+	}
+	
+	
+	public MemberDTO login(MemberDTO memberDTO) throws Exception{
+		MemberDTO mDto = null;
+		Connection con = DBConnector.getConnect();
+		String sql = "select * from member where id=? and pw=?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, memberDTO.getId());
+		st.setString(2, memberDTO.getPw());
+		ResultSet rs = st.executeQuery();
+		
+		
+		if(rs.next()) {
+			mDto = new MemberDTO();
+			mDto.setId(rs.getString("id"));
+			mDto.setName(rs.getString("name"));
+			mDto.setEmail(rs.getString("email"));
+			mDto.setPhone(rs.getString("phone"));
+			mDto.setAge(rs.getInt("age"));
+			mDto.setJob(rs.getString("job"));
+		}
+	
+		DBConnector.disConnect(rs, st, con);
+		
+		
+		return mDto;
+	
+	}
+	
+	
+	
+	
+	
+	
+	
 	public int getTotalCount(String kind, String search) throws Exception {
 		Connection con = DBConnector.getConnect();
 		String sql ="select nvl(count(id), 0) from member where "+ kind+ " like ?";
@@ -100,32 +144,7 @@ public class MemberDAO {
 	}
 	
 
-	public MemberDTO login(MemberDTO memberDTO) throws Exception{
-
-		Connection con = DBConnector.getConnect();
-		String sql = "select * from member where id=? and pw=?";
-		PreparedStatement st = con.prepareStatement(sql);
-		st.setString(1, memberDTO.getId());
-		st.setString(2, memberDTO.getPw());
-		ResultSet rs = st.executeQuery();
-		MemberDTO mDto = null;
-		
-		if(rs.next()) {
-			mDto = new MemberDTO();
-			mDto.setId(rs.getString("id"));
-			mDto.setName(rs.getString("name"));
-			mDto.setEmail(rs.getString("email"));
-			mDto.setPhone(rs.getString("phone"));
-			mDto.setAge(rs.getInt("age"));
-			mDto.setJob(rs.getString("job"));
-		}
 	
-		DBConnector.disConnect(rs, st, con);
-		
-		
-		return mDto;
-	
-	}
 	
 	
 	

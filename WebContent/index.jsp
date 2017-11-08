@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@page import="com.iu.member.MemberDTO"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,8 +17,8 @@
 </head>
 <body>
 	
+
 	<%@ include file="./temp/header.jsp" %>
-	
 	
 	<!-- Header 끝 -->
 	
