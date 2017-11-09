@@ -25,8 +25,10 @@
 <link href="../css/main.css" rel="stylesheet">
 </head>
 <body>
+
 	<%@ include file="../temp/header.jsp"%>
-<br><br><br><BR><BR><BR>
+<section id="main">
+<div id="mainContents">
 <form name="frm" action="memberLoginProcess.jsp" method="post">
 <p>ID : <input type="text" id="id" name="id" value="<%=cId%>"></p>
 <p>PW : <input type="password" id="pw" name="pw"></p>
@@ -34,7 +36,8 @@
 ID 저장하기 : <input type="checkbox" value="save" name="save"> 
 </form> 
 <span id="fa"></span>
-<br><br><br><BR><BR><BR>
+</div>
+</section>
 	<%@ include file="../temp/footer.jsp"%>
 </body>
 

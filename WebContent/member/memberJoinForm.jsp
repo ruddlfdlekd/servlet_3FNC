@@ -20,8 +20,8 @@
 <body>
 	<%@ include file="../temp/header.jsp" %>
 
-<section>
-<div>
+<section id="main">
+<div id="mainContents">
 <h1>MEMBER JOIN</h1>
 <br><BR><BR><BR><BR><BR><BR>
 	<form name ="frm" action="./memberJoinProcess.jsp">

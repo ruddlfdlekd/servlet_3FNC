@@ -14,14 +14,10 @@
 		e.printStackTrace();
 	}
 	
-	if(request.getAttribute("num")!=null&&num==0){
-		num=(int)request.getAttribute("num");
-	}
 	
 	noticeDAO noticeDAO = new noticeDAO();
 	noticeDTO noticeDTO = noticeDAO.select(num);
 	noticeDAO.hit(noticeDTO.getHit(),noticeDTO.getNum());
-	request.setAttribute("num",null);
 %>
     
     

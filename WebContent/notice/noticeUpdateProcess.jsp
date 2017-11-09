@@ -2,7 +2,7 @@
 <%@page import="com.iu.notice.noticeDAO"%>
 <%@page import="com.iu.notice.noticeDTO"%>
 <%@page import="java.sql.PreparedStatement"%>
-<%@page import="com.iu.notice.DBConnector"%>
+<%@page import="com.iu.util.DBConnector"%>
 <%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>

@@ -63,7 +63,7 @@ window.onload=function(){
 	});
 
 	btn3.addEventListener("click", function(){
-		location.href="./noticeDeleteProcess.jsp?num=<%=noticeDTO.getNum()%>";			
+		location.href="./noticeView.jsp?num=<%=noticeDTO.getNum()%>";			
 	});
 		
 	
@@ -84,6 +84,9 @@ window.onload=function(){
 	<form id="frm" name="frm" action="noticeUpdateProcess.jsp?num=<%=noticeDTO.getNum()%>" method="post">
 	<h1>Update</h1>
 	<table style="margin:0 auto;">
+		<tr><td>
+		<input type="text" name="id" id="id"  style="width:800px;" value="<%=noticeDTO.getWriter()%>">
+		</td></tr>
 		<tr><td>
 		<input type="text" name="title" id="title"  style="width:800px;" value="<%=noticeDTO.getTitle()%>">
 		</td></tr>
