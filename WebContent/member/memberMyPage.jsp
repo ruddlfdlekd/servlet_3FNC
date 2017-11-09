@@ -35,7 +35,7 @@
 			</tr>
 		</table>
 	<div>
-	<a class="btn btn-danger" href="./memberUpdate.jsp">Update</a>
+	<a class="btn btn-danger" href="./memberUpdateForm.jsp">Update</a>
 	<a class="btn btn-default" href="./memberDelete.jsp">Delete</a> 
 	</div>
 	</section>

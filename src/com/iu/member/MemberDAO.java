@@ -9,6 +9,27 @@ import com.iu.util.DBConnector;
 
 public class MemberDAO {
 	//getCount
+	
+	public int Update(MemberDTO memberDTO) throws Exception{
+		Connection con = DBConnector.getConnect();
+		String sql = "Update member set pw=?,name=?,email=?,phone=?,age=? where id=?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, memberDTO.getPw());
+		st.setString(2, memberDTO.getName());
+		st.setString(3, memberDTO.getEmail());
+		st.setString(4, memberDTO.getPhone());
+		st.setInt(5, memberDTO.getAge());
+		st.setString(6, memberDTO.getId());
+		int result = st.executeUpdate();
+		DBConnector.disConnect(st, con);
+		return result;
+	}
+	
+	
+	
+	
+	
+	
 	public int Delete(String id)throws Exception{
 		Connection con = DBConnector.getConnect();
 		String sql = "Delete from member where id=?";

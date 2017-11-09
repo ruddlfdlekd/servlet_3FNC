@@ -4,7 +4,7 @@
 	request.setCharacterEncoding("UTF-8");
 	response.setCharacterEncoding("UTF-8");
 	String s = request.getAttribute("message")+"";
-	String path = request.getAttribute("path")+"";;
+	String path = request.getAttribute("path")+"";
 %>    
 <!DOCTYPE html>
 <html>

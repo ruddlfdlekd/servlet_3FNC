@@ -4,6 +4,8 @@
 <%@page import="com.iu.notice.noticeDAO"%>
     
 <%
+	
+
 	int num = 0; 
 
 	try{
@@ -11,10 +13,15 @@
 	}catch(Exception e){
 		e.printStackTrace();
 	}
+	
+	if(request.getAttribute("num")!=null&&num==0){
+		num=(int)request.getAttribute("num");
+	}
+	
 	noticeDAO noticeDAO = new noticeDAO();
 	noticeDTO noticeDTO = noticeDAO.select(num);
 	noticeDAO.hit(noticeDTO.getHit(),noticeDTO.getNum());
-	
+	request.setAttribute("num",null);
 %>
     
     
@@ -54,10 +61,7 @@ window.onload=function(){
 	btn3.addEventListener("click", function(){
 		location.href="./noticeDeleteProcess.jsp?num=<%=noticeDTO.getNum()%>";
 	});
-	btn4.addEventListener("click", function(){
-		location.href="./noticeList.jsp";			
-	});
-	
+
 	
 }
 </script>
@@ -81,9 +85,12 @@ window.onload=function(){
 		</td></tr>
 		</table>
 		<div>
+		<input type="button" class="btn btn-info" id="btn4" value="목록" style="float:right; margin-left:20px;" onClick="location.href='./noticeList.jsp';">
+		<%if(memberDTO!=null&&memberDTO.getId().equals(noticeDTO.getWriter())){ %>
 	<input type="button" class="btn btn-info" id="btn2" value="수정" style="float:right;">
 	<input type="button" class="btn btn-info" id="btn3" value="삭제" style="float:right; margin-right:20px;">
-	<input type="button" class="btn btn-info" id="btn4" value="목록" style="float:right; margin-right:20px;">
+	<%} %>
+	
 	</div>
 	</div>
 

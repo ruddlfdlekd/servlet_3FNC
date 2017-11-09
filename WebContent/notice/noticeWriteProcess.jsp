@@ -1,5 +1,6 @@
 <%@page import="com.iu.notice.noticeDAO"%>
 <%@page import="com.iu.notice.noticeDTO"%>
+<%@page import="com.iu.member.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
  <%
@@ -8,7 +9,8 @@
 	response.setCharacterEncoding("UTF-8");
 	noticeDTO noticeDTO = new noticeDTO();
 	noticeDTO.setTitle(request.getParameter("title"));
-	noticeDTO.setWriter("t3");
+	System.out.println(((MemberDTO)session.getAttribute("member")).getId());
+	noticeDTO.setWriter(((MemberDTO)session.getAttribute("member")).getId());
 	noticeDTO.setContents(request.getParameter("contents"));
 	
 	
@@ -21,9 +23,15 @@
 	if(result>0){
 		s="Success";
 	}
+	
 	request.setAttribute("message", s);
-	response.sendRedirect("../common/result.jsp");
-
+	request.setAttribute("path", "noticeList.jsp");
+	RequestDispatcher view = request.getRequestDispatcher("../common/result.jsp");
+	view.forward(request, response);
+	
+	
+	
+	
 %>
 
 
